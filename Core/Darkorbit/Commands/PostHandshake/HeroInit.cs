@@ -102,14 +102,6 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             XP = reader.ReadDouble();
             X = reader.ReadInt32();
             X = (int)((uint)X >> 1 | (uint)X << 31);
-            Console.WriteLine();
-/*
-            var_3377 = reader.ReadUInt32();
-            var_3377 = var_3377 >> 12 | var_3377 << 20;
-            
-            Rank = reader.ReadUInt32();
-            Rank = Rank >> 2 | Rank << 30;
-            reader.ReadUInt32();*/
         }
     }
 }
