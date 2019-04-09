@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     public class OldStylePacket : Command
     {
-        public const ushort ID = 28511;
+        public const ushort ID = 5586;
 
         public string Message { get; set; }
 
@@ -26,10 +26,12 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public void Write()
         {
-            packetWriter.Write((short)(4 + Message.Length));
+            packetWriter.Write((short)(8 + Message.Length));
             packetWriter.Write(ID);
             packetWriter.Write((ushort)Message.Length);
             packetWriter.Write(Encoding.UTF8.GetBytes(Message));
+            packetWriter.Write((short)-593);
+            packetWriter.Write((short)-16529);
         }
     }
 }

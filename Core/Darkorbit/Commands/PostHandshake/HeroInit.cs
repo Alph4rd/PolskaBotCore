@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class HeroInit : Command
     {
-        public const ushort ID = 23292;
+        public const ushort ID = 8273;
 
         public float Jackpot { get; private set; }
         public uint MaxShield { get; private set; } //name_103
@@ -24,12 +24,12 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
         public bool Cloaked { get; private set; }
         public string Username { get; private set; } //var_3495
         public uint Speed { get; private set; }
-        public uint CargoCapacity { get; private set; } //var_3020
+        public int CargoCapacity { get; private set; } //var_3020
         public uint Shield { get; private set; }
         public int X { get; private set; }
         public int Y { get; private set; }
         public uint UserID { get; private set; } //name_125
-        public uint var_3377 { get; private set; }
+        public uint var_3377 { get; private set; } //h4p§
         public uint var_3914 { get; private set; } //var_3914
         public uint FreeCargoSpace { get; private set; } //var_4296
         public string Shipname { get; private set; } //name_122
@@ -45,64 +45,68 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public HeroInit(EndianBinaryReader reader)
         {
-            var_3377 = reader.ReadUInt32();
-            var_3377 = var_3377 << 11 | var_3377 >> 21;
-            X = reader.ReadInt32();
-            X = (int)((uint)X << 12 | (uint)X >> 20);
-            Rank = reader.ReadUInt32();
-            Rank = Rank >> 2 | Rank << 30;
-            XP = reader.ReadDouble();
+            HP = reader.ReadUInt32();
+            HP = HP << 12 | HP >> 20;
             Credits = reader.ReadDouble();
+            ClanTag = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
+            Cloaked = reader.ReadBoolean();
+            FreeCargoSpace = reader.ReadUInt32();
+            FreeCargoSpace = FreeCargoSpace >> 12 | FreeCargoSpace << 20;
+            Jackpot = reader.ReadSingle();
+            MaxShield = reader.ReadUInt32();
+            MaxShield = MaxShield << 7 | MaxShield >> 25;
+            FactionID = reader.ReadUInt32();
+            FactionID = FactionID << 10 | FactionID >> 22;
+            MaxHP = reader.ReadUInt32();
+            MaxHP = MaxHP << 15 | MaxHP >> 17;
+            var_3678 = reader.ReadBoolean();
+            Shield = reader.ReadUInt32();
+            Shield = Shield << 9 | Shield >> 23;
+            var_4823 = reader.ReadBoolean();
+            ClanID = reader.ReadUInt32();
+            ClanID = ClanID << 2 | ClanID >> 30;
+            reader.ReadInt16();
+            Speed = reader.ReadUInt32();
+            Speed = Speed >> 6 | Speed << 26;
+            var_3914 = reader.ReadUInt32();
+            var_3914 = var_3914 >> 2 | var_3914 << 30;
+            Map = reader.ReadUInt32();
+            Map = Map >> 10 | Map << 22;
+            UserID = reader.ReadUInt32();
+            UserID = UserID << 11 | UserID >> 21;
+            Username = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
+            reader.ReadUInt32();
+            Level = reader.ReadUInt32();
+            Level = Level >> 13 | Level << 19;
+            Y = reader.ReadInt32();
+            Y = (int)((uint)Y << 3 | (uint)Y >> 29);
+            Premium = reader.ReadBoolean();
             int length = reader.ReadInt32();
-            if (length > 0)
-            {
-                for (int i = 0; i < length; i++)
-                {
-                    reader.ReadInt16();
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
+
+                    reader.ReadInt32();
                     Class326 class326 = new Class326(reader);
                 }
             }
-            FreeCargoSpace = reader.ReadUInt32();
-            FreeCargoSpace = FreeCargoSpace >> 4 | FreeCargoSpace << 28;
-            CargoCapacity = reader.ReadUInt32();
-            CargoCapacity = CargoCapacity >> 11 | CargoCapacity << 21;
-            var_3914 = reader.ReadUInt32();
-            var_3914 = var_3914 >> 2 | var_3914 << 30;
-            var_4823 = reader.ReadBoolean();
-            Honor = reader.ReadDouble();
             NanoHP = reader.ReadUInt32();
-            NanoHP = NanoHP << 16 | NanoHP >> 16;
-            Uridium = reader.ReadDouble();
-            Speed = reader.ReadUInt32();
-            Speed = Speed << 4 | Speed >> 28;
-            Cloaked = reader.ReadBoolean();
-            Level = reader.ReadUInt32();
-            Level = Level << 2 | Level >> 30;
-            Shield = reader.ReadUInt32();
-            Shield = Shield >> 16 | Shield << 16;
+            NanoHP = NanoHP << 3 | NanoHP >> 29;
+            Honor = reader.ReadDouble();
             Shipname = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
-            FactionID = reader.ReadUInt32();
-            FactionID = FactionID << 10 | FactionID >> 22;
-            ClanTag = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
-            Premium = reader.ReadBoolean();
-            reader.ReadUInt32();
-            UserID = reader.ReadUInt32();
-            UserID = UserID >> 16 | UserID << 16;
-            var_3678 = reader.ReadBoolean();
-            Map = reader.ReadUInt32();
-            Map = Map >> 10 | Map << 22;
-            Y = reader.ReadInt32();
-            Y = (int)((uint)Y << 8 | (uint)Y >> 24);
-            MaxHP = reader.ReadUInt32();
-            MaxHP = MaxHP >> 8 | MaxHP << 24;
-            Username = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
-            MaxShield = reader.ReadUInt32();
-            MaxShield = MaxShield >> 2 | MaxShield << 30;
-            ClanID = reader.ReadUInt32();
-            ClanID = ClanID << 2 | ClanID >> 30;
-            HP = reader.ReadUInt32();
-            HP = HP << 16 | HP >> 16;
-            Jackpot = reader.ReadSingle();
+            Uridium = reader.ReadDouble();
+            CargoCapacity = reader.ReadInt32();
+            CargoCapacity = (int)((uint)CargoCapacity << 7 | (uint)CargoCapacity >> 25);
+            XP = reader.ReadDouble();
+            X = reader.ReadInt32();
+            X = (int)((uint)X >> 1 | (uint)X << 31);
+
+/*
+            var_3377 = reader.ReadUInt32();
+            var_3377 = var_3377 >> 12 | var_3377 << 20;
+            
+            Rank = reader.ReadUInt32();
+            Rank = Rank >> 2 | Rank << 30;
+            reader.ReadUInt32();*/
         }
     }
 }

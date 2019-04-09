@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class GateInit : Command
     {
-        public const ushort ID = 8519;
+        public const ushort ID = 6800;
 
         public int FactionID { get; private set; }
         public List<int> var_2358 { get; private set; } = new List<int>();
@@ -22,30 +22,29 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public GateInit(EndianBinaryReader reader)
         {
+            GateType = reader.ReadInt32();
+            GateType = (int)((uint)GateType << 2 | (uint)GateType >> 30);
+            AssetID = reader.ReadInt32();
+            AssetID = (int)((uint)AssetID << 5 | (uint)AssetID >> 27);
             var_4990 = reader.ReadBoolean();
-            reader.ReadUInt16();
+            X = reader.ReadInt32();
+            X = (int)((uint)X >> 16 | (uint)X << 16);
             int length = reader.ReadInt32();
-            if (length > 0)
-            {
-                for (int i = 0; i < length; i++)
-                {
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
                     int value = reader.ReadInt32();
-                    value = (int)((uint)value >> 15 | (uint)value << 17);
+                    value = (int)((uint)reader.ReadInt32() >> 2 | (uint)value << 30);
                     var_2358.Add(value);
                 }
             }
-            var_139 = reader.ReadBoolean();
-            Y = reader.ReadInt32();
-            Y = (int)((uint)Y << 8 | (uint)Y >> 24);
-            X = reader.ReadInt32();
-            X = (int)((uint)X << 10 | (uint)X >> 22);
-            AssetID = reader.ReadInt32();
-            AssetID = (int)((uint)AssetID << 5 | (uint)AssetID >> 27);
-            FactionID = reader.ReadInt32();
-            FactionID = (int)((uint)FactionID >> 15 | (uint)FactionID << 17);
             reader.ReadUInt16();
-            GateType = reader.ReadInt32();
-            GateType = (int)((uint)GateType << 10 | (uint)GateType >> 22);
+            Y = reader.ReadInt32();
+            Y = (int)((uint)Y << 2 | (uint)Y >> 30);
+            FactionID = reader.ReadInt32();
+            FactionID = (int)((uint)FactionID << 2 | (uint)FactionID >> 30);
+            var_139 = reader.ReadBoolean();
+            //reader.ReadUInt16();
+           
         }
     }
 }
