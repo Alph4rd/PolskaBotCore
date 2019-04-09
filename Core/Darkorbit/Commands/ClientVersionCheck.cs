@@ -15,7 +15,7 @@ namespace PolskaBot.Core.Darkorbit.Commands
         public int minor { get; set; }
         public int build { get; set; }
 
-        public ClientVersionCheck(int major, int minor, int build)
+        public ClientVersionCheck(int major = 0, int minor = 110, int build = 4)
         {
             this.major = major;
             this.minor = minor;
