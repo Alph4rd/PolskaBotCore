@@ -126,10 +126,10 @@ namespace PolskaBot.Core.Darkorbit
             }
 
             string loginResponse = httpManager.Post(WebUtility.HtmlDecode(match.Groups[1].ToString()), $"username={Username}&password={Password}");
-            match = Regex.Match(loginResponse, "http://(.*).darkorbit.bigpoint.com");
+            match = Regex.Match(httpManager.lastURL, "https://(.*).darkorbit.bigpoint.com");
 
             if (!match.Success)
-                match = Regex.Match(loginResponse, "http://(.*).darkorbit.com");
+                match = Regex.Match(httpManager.lastURL, "https://(.*).darkorbit.com");
                 if (!match.Success)
                 {
                     LoginFailed?.Invoke(this, EventArgs.Empty);
