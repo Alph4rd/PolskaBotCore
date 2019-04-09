@@ -86,6 +86,8 @@ namespace PolskaBot.Core
 
             id = cachedReader.ReadUInt16();
 
+            Console.WriteLine($"Received: {id}");
+
             switch (id)
             {
                 case ServerVersionCheck.ID:
@@ -117,6 +119,9 @@ namespace PolskaBot.Core
                     _proxy.InitStageTwo(serverRequestCallback.secretKey);
 
                     Console.WriteLine("StageTwo initialized");
+
+                    Console.WriteLine("Sending login request");
+
                     SendEncoded(new Ping());
                     SendEncoded(new Login(api.Account.UserID, api.Account.SID, 0, api.Account.InstanceID));
                     SendEncoded(new Ready());
@@ -292,7 +297,7 @@ namespace PolskaBot.Core
                     lock(api.oresLocker)
                         api.Ores.Add(new Ore(oreInit.Hash, oreInit.X, oreInit.Y, oreInit.Type));
                     break;
-                case 19680:
+                case 17162:
                     if (!pingThread.IsAlive)
                     {
                         pingThread = new Thread(new ThreadStart(PingLoop));
