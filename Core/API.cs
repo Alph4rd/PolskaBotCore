@@ -26,7 +26,6 @@ namespace PolskaBot.Core
         private VanillaClient _vanillaClient;
         private FadeProxyClient _proxy;
 
-        private string _ip;
         public DateTime LoginTime { get; protected set; } = DateTime.MinValue;
 
         // Logic
@@ -51,10 +50,8 @@ namespace PolskaBot.Core
         public event EventHandler<ShipMove> ShipMoving;
         public event EventHandler<EventArgs> Destroyed;
 
-        public API(string ip, FadeProxyClient proxy, Mode mode = Mode.BOT)
+        public API(FadeProxyClient proxy, Mode mode = Mode.BOT)
         {
-            _ip = ip;
-
             this.mode = mode;
 
             // Depedency injection
@@ -79,7 +76,7 @@ namespace PolskaBot.Core
         public void Stop()
         {
             _vanillaClient.Stop();
-            _vanillaClient.myPing?.Abort();
+            _vanillaClient.pingThread?.Abort();
         }
 
         public void Login(string username = null, string password = null)
@@ -115,7 +112,7 @@ namespace PolskaBot.Core
         public void Reconnect()
         {
             Console.WriteLine("Connection lost. Reconnecting.");
-            _vanillaClient.myPing?.Abort();
+            _vanillaClient.pingThread?.Abort();
             Boxes.Clear();
             MemorizedBoxes.Clear();
             Ores.Clear();
