@@ -18,7 +18,6 @@ namespace PolskaBot.Core
     {
 
         private FadeProxyClient _proxy;
-        private RemoteClient _remoteClient;
 
         public Thread pingThread;
 
@@ -33,7 +32,7 @@ namespace PolskaBot.Core
 
         public event EventHandler<string> LogMessage;
 
-        public VanillaClient(API api, FadeProxyClient proxy, RemoteClient remoteClient) : base(api)
+        public VanillaClient(API api, FadeProxyClient proxy) : base(api)
         {
             _proxy = proxy;
 
@@ -45,7 +44,6 @@ namespace PolskaBot.Core
 
             _proxy.StageOneFailed += (s, e) => Console.WriteLine("StageOne failed");
 
-            _remoteClient = remoteClient;
             pingThread = new Thread(new ThreadStart(PingLoop));
         }
 
@@ -106,24 +104,12 @@ namespace PolskaBot.Core
                     break;
 
                 case ServerRequestCode.ID:
-                    ServerRequestCode serverRequetCode = new ServerRequestCode(cachedReader);
-
-                    lock(_remoteClient.locker)
-                    {
-                        _remoteClient.Send(new RemoteInitStageOne(serverRequetCode.code, api.Account.UserID));
-                        EndianBinaryReader remoteReader = new EndianBinaryReader(EndianBitConverter.Big, _remoteClient.stream);
-                        short remoteLength = remoteReader.ReadInt16();
-                        if(remoteReader.ReadInt16() == 102)
-                        {
-                            Console.WriteLine("Received stageOne code response");
-                            if (remoteLength != 3)
-                                _proxy.InitStageOne(remoteReader.ReadBytes(remoteLength - 2));
-                            else
-                                AuthFailed?.Invoke(this, EventArgs.Empty);
-                        }
-                    }
-
+                    ServerRequestCode serverRequestCode = new ServerRequestCode(cachedReader);
+                    Generator generator = new Generator();
+                    generator.Build(serverRequestCode.code);
+                    _proxy.InitStageOne(generator.Output);
                     break;
+                    
                 case ServerRequestCallback.ID:
                     Console.WriteLine("Stage two received");
                     ServerRequestCallback serverRequestCallback = new ServerRequestCallback(cachedReader);

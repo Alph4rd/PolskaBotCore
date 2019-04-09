@@ -52,13 +52,13 @@ namespace PolskaBot
             "BONUS_BOX", "GIFT_BOXES", "EVENT_BOX", "PIRATE_BOOTY", "PIRATE_BOOTY_GOLD", "PIRATE_BOOTY_RED", "PIRATE_BOOTY_BLUE"
             };
 
-        public BotPage(string ip, FadeProxyClient proxy, string username, string password)
+        public BotPage(FadeProxyClient proxy, string username, string password)
         {
             Text = "Loading";
             BackColor = Color.White;
             InitializeComponent();
             DrawText("Loading");
-            api = new API(ip, proxy);
+            api = new API(proxy);
             AddHandlers();
             AddContextMenu();
 
@@ -83,7 +83,6 @@ namespace PolskaBot
 
         private void AddHandlers()
         {
-            api.AuthFailed += (s, e) => DrawText("No license for this account");
             api.Account.LoginSucceed += (s, e) => DrawText("Login succeed");
             api.Account.LoginFailed += (s, e) => DrawText("Login failed");
             api.HeroInited += (s, e) =>
