@@ -8,7 +8,7 @@ namespace PolskaBot.Core.Darkorbit.Commands
 {
     class ClientRequestCallback : Command
     {
-        public const ushort ID = 21314;
+        public const ushort ID = 8952;
 
         public byte[] callback { get; private set; }
 
@@ -20,12 +20,12 @@ namespace PolskaBot.Core.Darkorbit.Commands
 
         public void Write()
         {
-            short totalLength = (short)(8 + callback.Length);
+            short totalLength = (short)(6 + callback.Length);
             packetWriter.Write(totalLength);
             packetWriter.Write(ID);
             packetWriter.Write(callback.Length);
             packetWriter.Write(callback, 0, callback.Length);
-            packetWriter.Write((short)2596);
+
         }
     }
 }
