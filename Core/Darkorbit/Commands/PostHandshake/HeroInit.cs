@@ -92,6 +92,9 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             NanoHP = reader.ReadUInt32();
             NanoHP = NanoHP << 3 | NanoHP >> 29;
             Honor = reader.ReadDouble();
+            var_3377 = reader.ReadUInt32();
+            var_3377 = var_3377 >> 2 | var_3377 << 30;
+            reader.ReadUInt16(); // ....
             Shipname = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
             Uridium = reader.ReadDouble();
             CargoCapacity = reader.ReadInt32();
@@ -99,7 +102,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             XP = reader.ReadDouble();
             X = reader.ReadInt32();
             X = (int)((uint)X >> 1 | (uint)X << 31);
-
+            Console.WriteLine();
 /*
             var_3377 = reader.ReadUInt32();
             var_3377 = var_3377 >> 12 | var_3377 << 20;
