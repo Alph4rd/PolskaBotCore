@@ -37,7 +37,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             packetWriter.Write(ID);
             packetWriter.Write(FactionID); 
             packetWriter.Write((short)12770);
-            packetWriter.Write(InstanceID >> 9 | InstanceID << 23); // doesn't work
+            packetWriter.Write((InstanceID >> 9 | InstanceID << 23));
             packetWriter.Write((byte)0);
             packetWriter.Write((byte)SID.Length);
             packetWriter.Write(utfBytes);
