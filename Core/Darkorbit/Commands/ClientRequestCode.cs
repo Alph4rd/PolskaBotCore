@@ -8,7 +8,7 @@ namespace PolskaBot.Core.Darkorbit.Commands
 {
     class ClientRequestCode : Command
     {
-        public const ushort ID = 15135;
+        public const ushort ID = 10029;
         public short length { get; private set; } = 4;
 
         public ClientRequestCode()
@@ -20,7 +20,7 @@ namespace PolskaBot.Core.Darkorbit.Commands
         {
             packetWriter.Write(length);
             packetWriter.Write(ID);
-            packetWriter.Write((short)-32516);
+            packetWriter.Write((short)10850);
         }
     }
 }
