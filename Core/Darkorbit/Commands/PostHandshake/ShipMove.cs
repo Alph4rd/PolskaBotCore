@@ -19,11 +19,12 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
         public ShipMove(EndianBinaryReader reader)
         {
             UserID = reader.ReadUInt32();
-            UserID = UserID >> 7 | UserID << 25;
+            UserID = UserID >> 4 | UserID << 28;
             Y = reader.ReadInt32();
-            Y = (int)((uint)Y >> 3 | (uint)Y << 29);
+            Y = (int)((uint)Y >> 7 | (uint)Y << 25);
             Duration = reader.ReadUInt32();
-            Duration = Duration >> 33 | Duration << 29;
+            Duration = Duration >> 3 | Duration << 29;
+            reader.ReadInt16();
             X = reader.ReadInt32();
             X = (int)((uint)X << 8 | (uint)X >> 24);
         }
