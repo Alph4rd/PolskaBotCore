@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+
+using System.Net.Security;
 using System.Text.RegularExpressions;
 using PolskaBot.Core.Darkorbit;
 using PolskaBot.Core.Darkorbit.Commands;
@@ -23,7 +25,6 @@ namespace PolskaBot.Core
 
         private VanillaClient _vanillaClient;
         private FadeProxyClient _proxy;
-        private RemoteClient _remoteClient;
 
         private string _ip;
         public DateTime LoginTime { get; protected set; } = DateTime.MinValue;
@@ -48,7 +49,6 @@ namespace PolskaBot.Core
         public event EventHandler<EventArgs> HeroInited;
         public event EventHandler<ShipAttacked> Attacked;
         public event EventHandler<ShipMove> ShipMoving;
-        public event EventHandler<EventArgs> AuthFailed;
         public event EventHandler<EventArgs> Destroyed;
 
         public API(string ip, FadeProxyClient proxy, Mode mode = Mode.BOT)
@@ -60,12 +60,10 @@ namespace PolskaBot.Core
             // Depedency injection
             Account = new Account(this);
             _proxy = proxy;
-            _remoteClient = new RemoteClient(this);
-            _vanillaClient = new VanillaClient(this, proxy, _remoteClient);
+            _vanillaClient = new VanillaClient(this, proxy);
 
             Account.LoginSucceed += (s, e) => Connect();
 
-            _vanillaClient.AuthFailed += (s, e) => AuthFailed?.Invoke(s, e);
             _vanillaClient.Disconnected += (s, e) => Disconnected?.Invoke(s, e);
             _vanillaClient.HeroInited += (s, e) =>
             {
@@ -81,8 +79,7 @@ namespace PolskaBot.Core
         public void Stop()
         {
             _vanillaClient.Stop();
-            _vanillaClient.pingThread?.Abort();
-            _remoteClient.Stop();
+            _vanillaClient.myPing?.Abort();
         }
 
         public void Login(string username = null, string password = null)
@@ -98,23 +95,16 @@ namespace PolskaBot.Core
 
         public void Connect()
         {
-            _remoteClient.OnConnected += (s, e) =>
-            {
-                Console.WriteLine("Connected to remoteServer");
-                ((Client)s).thread.Abort();
-                var serverIP = GetIP();
-                if (serverIP != null)
-                    _vanillaClient.Connect(serverIP, 8080);
-                else
-                    Reconnect();
-            };
-
             _vanillaClient.OnConnected += (o, e) => _vanillaClient.Send(new ClientVersionCheck(Config.MAJOR, Config.MINOR, Config.BUILD));
             _vanillaClient.Disconnected += (o, e) => Reconnect();
-            _remoteClient.Disconnected += (o, e) => Reconnect();
 
             Connecting?.Invoke(this, EventArgs.Empty);
-            _remoteClient.Connect(_ip, 8082);
+
+            var serverIP = GetIP();
+            if (serverIP != null)
+                _vanillaClient.Connect(serverIP, 8080);
+            else
+                Reconnect();
         }
 
         public void SendEncoded(Command command)
@@ -125,7 +115,7 @@ namespace PolskaBot.Core
         public void Reconnect()
         {
             Console.WriteLine("Connection lost. Reconnecting.");
-            _vanillaClient.pingThread?.Abort();
+            _vanillaClient.myPing?.Abort();
             Boxes.Clear();
             MemorizedBoxes.Clear();
             Ores.Clear();
@@ -133,26 +123,36 @@ namespace PolskaBot.Core
             Gates.Clear();
             Buildings.Clear();
             _proxy.Reset();
-            if(_remoteClient.tcpClient.Connected)
-                _remoteClient.Disconnect();
+
             if(_vanillaClient.tcpClient.Connected)
                 _vanillaClient.Disconnect();
+
             _vanillaClient.thread?.Abort();
-            _remoteClient.Connect(_ip, 8082);
         }
 
         public string GetIP()
         {
             using (var webClient = new WebClient())
             {
+                try {
+                    //Change SSL checks so that all checks pass
+                    ServicePointManager.ServerCertificateValidationCallback =
+                       new RemoteCertificateValidationCallback(
+                            delegate
+                            { return true; }
+                        );
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex);
+                }
                 try
                 {
                     var response = webClient.DownloadString($"http://{Account.Server}.darkorbit.bigpoint.com/spacemap/xml/maps.php");
                     var match = Regex.Match(response, $"<map id=\"{Account.Map}\"><gameserverIP>([0-9\\.]+)</gameserverIP></map>");
                     return match.Groups[1].ToString();
                 }
-                catch
-                {
+                catch (Exception ex) {
+                    Console.WriteLine(ex);
                     return null;
                 }
             }
