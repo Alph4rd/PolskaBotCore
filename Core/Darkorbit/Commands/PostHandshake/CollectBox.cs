@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     public class CollectBox : Command
     {
-        public const ushort ID = 12841;
+        public const ushort ID = 8992;
 
         public int BoxPosX { get; private set; } //var_3696
         public string Hash { get; private set; } //var_3886
@@ -29,15 +29,18 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public void Write()
         {
-            packetWriter.Write((short)(22 + Hash.Length));
+            packetWriter.Write((short)(24 + Hash.Length));
             packetWriter.Write(ID);
             packetWriter.Write((short)Hash.Length);
             packetWriter.Write(Encoding.UTF8.GetBytes(Hash));
-            packetWriter.Write((int)((uint)ShipPosY << 13 | (uint)ShipPosY >> 19));
-            packetWriter.Write((int)((uint)BoxPosX << 8 | (uint)BoxPosX >> 24));
-            packetWriter.Write((int)((uint)ShipPosX << 12 | (uint)ShipPosX >> 20));
-            packetWriter.Write((short)9444);
-            packetWriter.Write((int)((uint)BoxPosY >> 12 | (uint)BoxPosY << 20));
+            packetWriter.Write((short)19153);
+            packetWriter.Write((int)((uint)BoxPosY << 12 | (uint)BoxPosY >> 20));
+            packetWriter.Write((int)((uint)BoxPosX << 14 | (uint)BoxPosX >> 18));
+            packetWriter.Write((int)((uint)ShipPosX << 3 | (uint)ShipPosX >> 29));
+            packetWriter.Write((short)-20208);
+            packetWriter.Write((int)((uint)ShipPosY >> 10 | (uint)ShipPosY << 22));
+            
+            
 
         }
     }
