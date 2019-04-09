@@ -64,9 +64,6 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             reader.ReadInt32();
             NPC = reader.ReadBoolean();
             ClanTag = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
-            ClanID = reader.ReadUInt32();
-            ClanID = ClanID >> 12 | ClanID << 20;
-
             int length = reader.ReadInt32();
             if (length > 0)
             {
