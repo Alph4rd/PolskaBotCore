@@ -35,7 +35,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
         public ShipInit(EndianBinaryReader reader)
         {
             X = reader.ReadInt32();
-            X = (int)((uint)X << 14 | (uint)X >> 18);
+            X = (int)((uint)X << 10 | (uint)X >> 22);
             var_3914 = reader.ReadInt32();
             var_3914 = var_3914 >> 7 | var_3914 << 25;
             Cloaked = reader.ReadBoolean();
