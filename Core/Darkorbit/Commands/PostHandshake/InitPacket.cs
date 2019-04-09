@@ -8,11 +8,11 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class InitPacket : Command
     {
-        public const ushort ID = 31519;
+        public const ushort ID = 32235;
 
         public short Index { get; private set; }
 
-        public string Message { get; private set; } = "3D 1366x659 .root1.instance226.MainClientApplication0.ApplicationSkin2.Group3.Group4._-m5_5.instance24734 root1 false -1";
+        public string Message { get; private set; } = "2D 1366x659 .root1.instance522.MainClientApplication0.ApplicationSkin2.Group3.Group4._-S49_5.instance25095 root1 false -1";
 
         public InitPacket(short num)
         {
@@ -22,11 +22,12 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public void Write()
         {
-            short totalLength = (short)(Message.Length + 6);
+            short totalLength = (short)(Message.Length + 8);
             packetWriter.Write(totalLength);
             packetWriter.Write(ID);
             packetWriter.Write((byte)0);
             packetWriter.Write(Message);
+            packetWriter.Write((short)19611);
             packetWriter.Write(Index);
         }
     }
