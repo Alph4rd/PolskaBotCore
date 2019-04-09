@@ -63,14 +63,6 @@ namespace PolskaBot.Core.Darkorbit {
             Output[6] = Convert.ToByte((Output.Length & 0xFF0000) >> 16);
             Output[7] = Convert.ToByte((Output.Length & 0xFF000000) >> 24);
 
-            FileStream fs = File.Create("test.swf", 2048, FileOptions.None);
-            BinaryWriter bw = new BinaryWriter(fs);
-
-            bw.Write(Output);
-
-            bw.Close();
-            fs.Close();
-
         }
 
         private byte[] inflate(byte[] input) {
