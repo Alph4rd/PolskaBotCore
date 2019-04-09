@@ -99,7 +99,7 @@ namespace PolskaBot
                 logic = new Thread(new ThreadStart(Logic));
                 logic.Start();
 
-                FlyWithAnimation(api.Account.X, api.Account.Y); // Stop flying.
+               // FlyWithAnimation(api.Account.X, api.Account.Y); // Stop flying.
             };
 
             api.Attacked += (s, e) =>
