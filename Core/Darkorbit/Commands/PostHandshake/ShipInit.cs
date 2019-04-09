@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class ShipInit : Command
     {
-        public const ushort ID = 31178;
+        public const ushort ID = 17843;
 
         public bool var_4552 { get; private set; }
         public uint var_3834 { get; private set; }
@@ -38,45 +38,48 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             X = (int)((uint)X << 14 | (uint)X >> 18);
             var_3914 = reader.ReadInt32();
             var_3914 = var_3914 >> 7 | var_3914 << 25;
+            Cloaked = reader.ReadBoolean();
+            var_3834 = reader.ReadUInt32();
+            var_3834 = var_3834 << 3 | var_3834 >> 29;
             reader.ReadUInt16(); //class_940
             reader.ReadUInt16();
             reader.ReadUInt16();
-            var_4552 = reader.ReadBoolean();
-            NPC = reader.ReadBoolean();
             reader.ReadUInt16(); //class_396
             reader.ReadUInt16();
-            Cloaked = reader.ReadBoolean();
+            Shipname = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
             FactionID = reader.ReadInt32();
-            FactionID = (int)((uint)FactionID << 12 | (uint)FactionID >> 20);
-            Username = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
-            reader.ReadUInt16();
-            var_3674 = reader.ReadBoolean();
-            reader.ReadUInt16();
+            FactionID = (int)((uint)FactionID >> 1 | (uint)FactionID << 31);
+            Y = reader.ReadInt32();
+            Y = (int)((uint)Y << 8 | (uint)Y >> 24);
             var_3378 = reader.ReadUInt32();
-            var_3378 = var_3378 >> 13 | var_3378 << 19;
+            var_3378 = var_3378 >> 16 | var_3378 << 16;
             UserID = reader.ReadUInt32();
-            UserID = UserID << 4 | UserID >> 28;
-            Rank = reader.ReadUInt32();
-            Rank = Rank << 15 | Rank >> 17;
-            var_3834 = reader.ReadUInt32();
-            var_3834 = var_3834 >> 3 | var_3834 << 29;
-            ClanID = reader.ReadUInt32();
-            ClanID = ClanID >> 12 | ClanID << 20;
+            UserID = UserID << 16 | UserID >> 16;
+            string unknown = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
             var_2597 = reader.ReadUInt32();
             var_2597 = var_2597 >> 13 | var_2597 << 19;
+            Rank = reader.ReadUInt32();
+            Rank = Rank << 15 | Rank >> 17;
+            var_4552 = reader.ReadBoolean();
+            reader.ReadInt32();
+            NPC = reader.ReadBoolean();
+            ClanTag = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
+            ClanID = reader.ReadUInt32();
+            ClanID = ClanID >> 12 | ClanID << 20;
+
             int length = reader.ReadInt32();
             if (length > 0)
             {
                 for (int i = 0; i < length; i++)
                 {
-                    reader.ReadInt16();
+                    reader.ReadInt32();
                     Class326 class326 = new Class326(reader);
                 }
             }
-            Shipname = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
-            Y = reader.ReadInt32();
-            Y = (int)((uint)Y >> 10 | (uint)Y << 22);
-            ClanTag = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
+            Username = Encoding.UTF8.GetString(reader.ReadBytes(reader.ReadUInt16()));
+            var_3674 = reader.ReadBoolean();
+
+
         }
     }
 }
