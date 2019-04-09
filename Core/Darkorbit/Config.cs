@@ -9,8 +9,8 @@ namespace PolskaBot.Core.Darkorbit
     class Config
     {
         public static int MAJOR { get; set; } = 0;
-        public static int MINOR { get; set; } = 79;
-        public static int BUILD { get; set; } = 5;
+        public static int MINOR { get; set; } = 115;
+        public static int BUILD { get; set; } = 4;
 
         public const string VERSION = "8.3.2";
 
