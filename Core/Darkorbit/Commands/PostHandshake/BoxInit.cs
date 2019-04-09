@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class BoxInit : Command
     {
-        public const ushort ID = 3775;
+        public const ushort ID = 26873;
 
         public string Hash { get; private set; }
         public int X { get; private set; }
@@ -19,10 +19,13 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
         public BoxInit(EndianBinaryReader reader)
         {
             X = reader.ReadInt32();
-            X = (int)((uint)X << 3 | (uint)X >> 29);
+            X = (int)((uint)X >> 7 | (uint)X << 25);
+            reader.ReadUInt16();
             Y = reader.ReadInt32();
-            Y = (int)((uint)Y >> 16 | (uint)Y >> 16);
+            Y = (int)((uint)Y >> 7 | (uint)Y << 25);
+            reader.ReadUInt16();
             Hash = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
+            reader.ReadUInt16();
             Type = Encoding.Default.GetString(reader.ReadBytes(reader.ReadUInt16()));
         }
     }
