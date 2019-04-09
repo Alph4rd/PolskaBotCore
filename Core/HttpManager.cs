@@ -11,7 +11,7 @@ namespace PolskaBot.Core
 
         private WebHeaderCollection headers = new WebHeaderCollection();
 
-        private string lastURL = "https://www.google.pl/?gfe_rd=cr&ei=p9JpVuDNAeOv8wfZ85XgCA";
+        public string lastURL = "https://www.google.pl/?gfe_rd=cr&ei=p9JpVuDNAeOv8wfZ85XgCA";
 
         public string userAgent { get; set; }
 
