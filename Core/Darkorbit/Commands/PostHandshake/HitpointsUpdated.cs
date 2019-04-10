@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class HitpointsUpdated : Command
     {
-        public const ushort ID = 10586;
+        public const ushort ID = 16557;
 
         public int HP { get; private set; } //name_90
         public int MaxHP { get; private set; } //name_39
@@ -18,12 +18,13 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public HitpointsUpdated(EndianBinaryReader reader)
         {
+            MaxHP = reader.ReadInt32();
+            MaxHP = (int)((uint)MaxHP >> 9 | (uint)MaxHP << 23);
+            reader.ReadInt16();
+            HP = reader.ReadInt32();
+            HP = (int)((uint)HP << 1 | (uint)HP >> 31);
             NanoHP = reader.ReadInt32();
             NanoHP = (int)((uint)NanoHP >> 16 | (uint)NanoHP << 16);
-            HP = reader.ReadInt32();
-            HP = (int)((uint)HP << 6 | (uint)HP >> 26);
-            MaxHP = reader.ReadInt32();
-            MaxHP = (int)((uint)MaxHP << 16 | (uint)MaxHP >> 16);
             MaxNanoHP = reader.ReadInt32();
             MaxNanoHP = (int)((uint)MaxNanoHP >> 13 | (uint)MaxNanoHP << 19);
         }
