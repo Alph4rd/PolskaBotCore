@@ -21,7 +21,7 @@ namespace PolskaBot.Core.Darkorbit
         public int InstanceID { get; private set; }
         public string SID { get; private set; }
         public string Server { get; private set; }
-        public int Map { get; private set; }
+        public int Map { get; set; }
 
         // Movement
         public int X { get; set; }
@@ -29,6 +29,7 @@ namespace PolskaBot.Core.Darkorbit
         public int TargetX { get; set; }
         public int TargetY { get; set; }
         public bool Flying { get; set; }
+        public double MovementTime { get; set; } = 0;
 
         // Map statistics
         public int HP { get; set; }
@@ -141,13 +142,15 @@ namespace PolskaBot.Core.Darkorbit
             string mapResponse = httpManager.Get($"{match.Value}/indexInternal.es?action=internalMapRevolution");
             match = Regex.Match(mapResponse, "{\"pid\":([0-9]+),\"uid\":([0-9]+)[\\w,\":]+sid\":\"([0-9a-z]+)\"");
 
-            if (!match.Success)
+            Match pid = Regex.Match(mapResponse, "basePath\": \"spacemap\",\"pid\": \"([0-9]+)");
+
+            if (!match.Success || !pid.Success)
             {
                 LoginFailed?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
-            InstanceID = int.Parse(match.Groups[1].ToString());
+            InstanceID = int.Parse(pid.Groups[1].ToString());
             UserID = int.Parse(match.Groups[2].ToString());
             SID = match.Groups[3].ToString();
             match = Regex.Match(mapResponse, "mapID\": \"([0-9]*)\"");
