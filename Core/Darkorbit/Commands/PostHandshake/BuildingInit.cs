@@ -28,12 +28,13 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
         public int FactionID { get; private set; }
         public bool var_1531 { get; private set; }          // var_1531
         public string Name { get; private set; }            //var_3497
+        public ushort ClanDiplomacy{ get; private set; }
 
         public BuildingInit(EndianBinaryReader reader)
         {
             //class_940 begin read
             reader.ReadUInt16();
-            reader.ReadUInt16();
+            ClanDiplomacy = reader.ReadUInt16();
             reader.ReadUInt16();
             X = reader.ReadInt32();
             X = (int)((uint)X >> 12 | (uint)X << 20);

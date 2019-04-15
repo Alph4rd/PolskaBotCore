@@ -9,7 +9,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     public class ShipAttacked : Command
     {
-        public const ushort ID = 26309;
+        public const ushort ID = 29644;
 
         public int UserID { get; private set; }         // name_143
         public int Var_250 { get; private set; }
@@ -19,14 +19,20 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public ShipAttacked(EndianBinaryReader reader)
         {
-            UserID = reader.ReadInt32();
-            UserID = (int)((uint)UserID >> 5 | (uint)UserID << 27);
-            AttackerID = reader.ReadInt32();
-            AttackerID = (int)((uint)AttackerID >> 16 | (uint)AttackerID << 16);
-            Var_2560 = reader.ReadBoolean();
             Var_2969 = reader.ReadBoolean();
+
+            AttackerID = reader.ReadInt32();
+            AttackerID = (int)((uint)AttackerID >> 10 | (uint)AttackerID << 22);
+
             Var_250 = reader.ReadInt32();
-            Var_250 = (int)((uint)Var_250 >> 10 | (uint)Var_250 << 22);
+            Var_250 = (int)((uint)Var_250 << 7 | (uint)Var_250 >> 25);
+
+            Var_2560 = reader.ReadBoolean();
+            reader.ReadInt16();
+
+            UserID = reader.ReadInt32();
+            UserID = (int)((uint)UserID >> 15 | (uint)UserID << 17);
+            reader.ReadInt16();
         }
     }
 }

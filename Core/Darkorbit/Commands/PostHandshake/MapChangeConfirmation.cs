@@ -8,7 +8,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class MapChangeConfirmation : Command
     {
-        public const ushort ID = 20064;
+        public const ushort ID = 22975;
 
         public bool Close { get; private set; }
 

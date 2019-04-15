@@ -25,7 +25,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
             GateType = reader.ReadInt32();
             GateType = (int)((uint)GateType << 2 | (uint)GateType >> 30);
             AssetID = reader.ReadInt32();
-            AssetID = (int)((uint)AssetID << 5 | (uint)AssetID >> 27);
+            AssetID = (int)((uint)AssetID >> 14 | (uint)AssetID << 18);
             var_4990 = reader.ReadBoolean();
             X = reader.ReadInt32();
             X = (int)((uint)X >> 16 | (uint)X << 16);

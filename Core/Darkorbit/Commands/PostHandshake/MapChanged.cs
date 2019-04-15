@@ -9,18 +9,18 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 {
     class MapChanged : Command
     {
-        public const ushort ID = 22027;
+        public const ushort ID = 17588;
 
         public int MapID { get; private set; }
-        public int var_294 { get; private set; }
+        public int GateID { get; private set; }
 
         public MapChanged(EndianBinaryReader reader)
         {
-            MapID = reader.ReadInt32();
-            MapID = (int)((uint)MapID << 16 | (uint)MapID >> 16);
             reader.ReadUInt16();
-            var_294 = reader.ReadInt32();
-            var_294 = (int)((uint)var_294 << 11 | (uint)var_294 >> 21);
+            MapID = reader.ReadInt32();
+            MapID = (int)((uint)MapID << 9 | (uint)MapID >> 23);
+            GateID = reader.ReadInt32();
+            GateID = (int)((uint)GateID >> 14 | (uint)GateID << 18);
         }
     }
 }

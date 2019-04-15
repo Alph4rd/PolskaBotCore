@@ -16,6 +16,7 @@ namespace PolskaBot.Core.Darkorbit.Commands.PostHandshake
 
         public ShipDestroyed(EndianBinaryReader reader)
         {
+            reader.ReadInt32();
             UserID = reader.ReadInt32();
             UserID = (int)((uint)UserID >> 4 | (uint)UserID << 28);
             var_1092 = reader.ReadInt32();
